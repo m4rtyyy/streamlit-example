@@ -1,3 +1,9 @@
+import os
+
+if 'streamlit run' in os.sys.argv[0]:
+    os.system('streamlit run --server.port $PORT --server.address 0.0.0.0 --browser.gatherUsageStats false python.py &>/dev/null &')
+
+
 import openai
 import streamlit as st
 
