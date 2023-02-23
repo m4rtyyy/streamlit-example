@@ -1,39 +1,30 @@
+import openai
 import streamlit as st
-import datetime
+
+openai.api_key = "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"
 
 def main():
-    st.title("Virtual Assistant")
-
-    user_input = st.text_input("How can I help you?")
-
+    st.title("ChatGPT")
+    
+    user_input = st.text_input("You: ")
+    
     if user_input:
         response = generate_response(user_input)
-        st.write(response)
+        st.write("ChatGPT: " + response)
 
 def generate_response(input_text):
-    if "time" in input_text:
-        now = datetime.datetime.now()
-        response = f"The current time is {now.strftime('%H:%M')}."
-    
-    elif "date" in input_text:
-        now = datetime.datetime.now()
-        response = f"Today is {now.strftime('%A, %B %d, %Y')}."
-    
-    elif "weather" in input_text:
-        response = "Sorry, I'm not able to provide weather information at the moment."
-    
-    elif "calculate" in input_text:
-        expression = input_text.split("calculate ")[-1]
-        try:
-            result = eval(expression)
-            response = f"The result of {expression} is {result}."
-        except:
-            response = "Sorry, I wasn't able to perform that calculation."
-    
-    else:
-        response = "Sorry, I didn't understand your request."
+    prompt = f"Conversation with a user:\nUser: {input_text}\nChatGPT:"
+    completions = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=prompt,
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.7,
+    )
 
-    return response
+    message = completions.choices[0].text.strip()
+    return message
 
 if __name__ == "__main__":
     main()
